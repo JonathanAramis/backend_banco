@@ -4,7 +4,8 @@ namespace backend.Interfaces.Services
 {
     public interface IContaCorrenteService
     {
+        void AtualizarExtrato(AtualizarExtratoContaCorrenteResponse request);
         Task IncluirExtrato(ExtratoContaCorrenteRequest request);
-        Task<IEnumerable<ExtratoContaCorrente>> ObterExtrato();
+        Task<ObterExtratoContaCorrenteResponse> ObterExtrato(ObterExtratoContaCorrenteRequest request);
     }
 }

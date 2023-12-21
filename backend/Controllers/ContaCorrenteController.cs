@@ -23,10 +23,9 @@ namespace backend.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("ObterExtrato")]
-        public async Task<IActionResult> ObterExtrato() 
-            //<IEnumerable<ExtratoContaCorrenteResponse>>
+        public async Task<IActionResult> ObterExtrato([FromQuery]ObterExtratoContaCorrenteRequest request) 
         {
-            var response = await _contaCorrenteService.ObterExtrato();
+            var response = await _contaCorrenteService.ObterExtrato(request);
             return Ok(response);
         }
 
@@ -40,6 +39,18 @@ namespace backend.Controllers
         {
             await _contaCorrenteService.IncluirExtrato(request);
             return Created();
+        }
+
+        /// <summary>
+        /// Atualizar valor do extrato da conta corrente.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPut("AtualizarExtrato")]
+        public async Task<IActionResult> AtualizarExtrato([FromQuery] AtualizarExtratoContaCorrenteResponse request)
+        {
+            _contaCorrenteService.AtualizarExtrato(request);
+            return NoContent();
         }
     }
 }

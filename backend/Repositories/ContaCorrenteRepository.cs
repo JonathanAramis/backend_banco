@@ -12,9 +12,9 @@ namespace backend.Repositories
         {
             _extratoContaCorrenteDbContext = extratoContaCorrenteDbContext;
         }
-        public async Task<IEnumerable<ExtratoContaCorrente>> ObterExtrato()
+        public async Task<IEnumerable<ExtratoContaCorrente>> ObterExtrato(ObterExtratoContaCorrenteRequest request)
         {
-            return await _extratoContaCorrenteDbContext.ExtratoContaCorrentes.ToListAsync();            
+            return _extratoContaCorrenteDbContext.ExtratoContaCorrentes.Where(a => (a.Data >= request.DataInicio) && (a.Data <= request.DataFim));
         }
 
         public void IncluirExtrato(ExtratoContaCorrenteRequest request)
@@ -29,6 +29,21 @@ namespace backend.Repositories
             };
 
             _extratoContaCorrenteDbContext.ExtratoContaCorrentes.Add(requestDb);
+            _extratoContaCorrenteDbContext.SaveChanges();
+        }
+
+        public void AtualizarExtrato(AtualizarExtratoContaCorrenteResponse request)
+        {
+            var extratoContaCorrente = new ExtratoContaCorrente()
+            {
+                Id = request.Id,
+                Valor = request.Valor,
+                Data = DateTime.Now,
+            };
+
+            _extratoContaCorrenteDbContext.Entry(extratoContaCorrente).Property(e => e.Valor).IsModified = true;
+            _extratoContaCorrenteDbContext.Entry(extratoContaCorrente).Property(e => e.Data).IsModified = true;
+            //_extratoContaCorrenteDbContext.ExtratoContaCorrentes.Update(extratoContaCorrente);
             _extratoContaCorrenteDbContext.SaveChanges();
         }
     }
