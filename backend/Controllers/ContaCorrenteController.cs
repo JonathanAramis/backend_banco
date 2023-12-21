@@ -18,18 +18,28 @@ namespace backend.Controllers
             _contaCorrenteService = contaCorrenteService;
         }
 
+        /// <summary>
+        /// Obter Extrato da conta corrente.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("ObterExtrato")]
-        public async Task<IEnumerable<ExtratoContaCorrenteResponse>> ObterExtrato()
+        public async Task<IActionResult> ObterExtrato() 
+            //<IEnumerable<ExtratoContaCorrenteResponse>>
         {
             var response = await _contaCorrenteService.ObterExtrato();
-            return response;
+            return Ok(response);
         }
 
-        [HttpGet("IncluirExtrato")]
-        public async Task IncluirExtrato()
+        /// <summary>
+        /// Incluir extrato da conta corrente.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("IncluirExtrato")]
+        public async Task<IActionResult> IncluirExtrato([FromQuery]ExtratoContaCorrenteRequest request)
         {
-            //await _contaCorrenteService.IncluirExtrato();
-            //return response;
+            await _contaCorrenteService.IncluirExtrato(request);
+            return Created();
         }
     }
 }

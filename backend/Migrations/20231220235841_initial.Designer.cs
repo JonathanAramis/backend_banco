@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using backend.Models.Responses;
+using backend.Data.Context;
 
 #nullable disable
 
 namespace backend.Migrations
 {
-    [DbContext(typeof(ExtratoContaCorrenteContext))]
+    [DbContext(typeof(ExtratoContaCorrenteDbContext))]
     [Migration("20231220235841_initial")]
     partial class initial
     {

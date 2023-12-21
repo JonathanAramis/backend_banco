@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using backend.Models.Responses;
+using backend.Data.Context;
 
 #nullable disable
 
 namespace backend.Migrations
 {
-    [DbContext(typeof(ExtratoContaCorrenteContext))]
+    [DbContext(typeof(ExtratoContaCorrenteDbContext))]
     partial class ExtratoContaCorrenteContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

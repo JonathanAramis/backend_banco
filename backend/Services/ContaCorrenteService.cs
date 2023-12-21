@@ -13,23 +13,12 @@ namespace backend.Services
 
         public async Task IncluirExtrato(ExtratoContaCorrenteRequest request)
         {
-            await _contaCorrenteRepository.IncluirExtrato(request);
-            throw new NotImplementedException();
+            _contaCorrenteRepository.IncluirExtrato(request);
         }
 
-        public async Task<IEnumerable<ExtratoContaCorrenteResponse>> ObterExtrato()
+        public async Task<IEnumerable<ExtratoContaCorrente>> ObterExtrato()
         {
-            var extratoContaCorrente = new ExtratoContaCorrenteResponse()
-            {
-                Id = 1,
-                Status = "Válido",
-                Avulso = true,
-                Data = DateTime.Now,
-                Descricao = "teste mock",
-                Valor = 123.4
-            };
-            var response = new List<ExtratoContaCorrenteResponse>() { extratoContaCorrente };
-            return response;
+            return await _contaCorrenteRepository.ObterExtrato();
         }
     }
 }

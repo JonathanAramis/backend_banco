@@ -4,6 +4,7 @@ namespace backend.Interfaces.Repositories
 {
     public interface IContaCorrenteRepository
     {
-        Task<bool> IncluirExtrato(ExtratoContaCorrenteRequest request);
+        void IncluirExtrato(ExtratoContaCorrenteRequest request);
+        Task<IEnumerable<ExtratoContaCorrente>> ObterExtrato();
     }
 }

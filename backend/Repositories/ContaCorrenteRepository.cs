@@ -1,24 +1,35 @@
-﻿using backend.Interfaces.Repositories;
+﻿using backend.Data.Context;
+using backend.Interfaces.Repositories;
 using backend.Models.Responses;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories
 {
     public class ContaCorrenteRepository : IContaCorrenteRepository
     {
-        //private readonly IUnitOfWork _unitOfWork;
-        public ContaCorrenteRepository() { }
-
-        public async Task<bool> IncluirExtrato(ExtratoContaCorrenteRequest request)
+        private readonly ExtratoContaCorrenteDbContext _extratoContaCorrenteDbContext;
+        public ContaCorrenteRepository(ExtratoContaCorrenteDbContext extratoContaCorrenteDbContext)
         {
-            var sql = @"
-                        INSERT INTO EXTRATO 
-                        (EXT_ID, EXT_DESCRICAO, EXT_DATA, EXT_VALOR, EXT_AVULSO, EXT_STATUS)
-                        VALUES
-                        ()
-                       ";
+            _extratoContaCorrenteDbContext = extratoContaCorrenteDbContext;
+        }
+        public async Task<IEnumerable<ExtratoContaCorrente>> ObterExtrato()
+        {
+            return await _extratoContaCorrenteDbContext.ExtratoContaCorrentes.ToListAsync();            
+        }
 
+        public void IncluirExtrato(ExtratoContaCorrenteRequest request)
+        {
+            var requestDb = new ExtratoContaCorrente()
+            {
+                Descricao = request.Descricao,
+                Avulso = request.Avulso,
+                Data = DateTime.Now,
+                StatusId = request.Status,
+                Valor = request.Valor,
+            };
 
-            throw new NotImplementedException();
+            _extratoContaCorrenteDbContext.ExtratoContaCorrentes.Add(requestDb);
+            _extratoContaCorrenteDbContext.SaveChanges();
         }
     }
 }
