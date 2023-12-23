@@ -7,6 +7,7 @@
         public DateTime Data { get; set; }
         public double Valor { get; set; }
         public bool Avulso { get; set; }
+        public int StatusId { get; set; }
         public ExtratoStatus Status { get; set; }
     }
 }

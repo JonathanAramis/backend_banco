@@ -1,9 +1,9 @@
-using backend.Configuration;
+using backend.Data.Context;
 using backend.Interfaces.Repositories;
 using backend.Interfaces.Services;
 using backend.Repositories;
 using backend.Services;
-using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +13,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddEntityFrameworkSqlServer().AddDbContext<ExtratoContaCorrenteDbContext>(
+        options => options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase"))
+    );
 
 builder.Services.AddScoped<IContaCorrenteRepository, ContaCorrenteRepository>();
 builder.Services.AddScoped<IContaCorrenteService, ContaCorrenteService>();

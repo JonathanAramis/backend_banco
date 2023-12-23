@@ -18,18 +18,63 @@ namespace backend.Controllers
             _contaCorrenteService = contaCorrenteService;
         }
 
+        /// <summary>
+        /// Obter Extrato da conta corrente.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("ObterExtrato")]
-        public async Task<IEnumerable<ExtratoContaCorrenteResponse>> ObterExtrato()
+        public async Task<IActionResult> ObterExtrato([FromQuery] ObterExtratoContaCorrenteRequest request)
         {
-            var response = await _contaCorrenteService.ObterExtrato();
-            return response;
+            var response = await _contaCorrenteService.ObterExtrato(request);
+            return Ok(response);
         }
 
-        [HttpGet("IncluirExtrato")]
-        public async Task IncluirExtrato()
+        /// <summary>
+        /// Incluir extrato da conta corrente.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("IncluirExtrato")]
+        public async Task<IActionResult> IncluirExtrato([FromQuery] ExtratoContaCorrenteRequest request)
         {
-            //await _contaCorrenteService.IncluirExtrato();
-            //return response;
+            await _contaCorrenteService.IncluirExtratoAvulso(request);
+            return Created();
+        }
+
+        /// <summary>
+        /// Atualizar valor do extrato da conta corrente.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPut("AtualizarExtrato")]
+        public async Task<IActionResult> AtualizarExtrato([FromQuery] AtualizarExtratoContaCorrenteRequest request)
+        {
+            _contaCorrenteService.AtualizarExtrato(request);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Atualizar status do extrato para cancelado.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPut("Cancelar/Extrato/{extratoId}")]
+        public async Task<IActionResult> CancelarExtrato([FromRoute] int extratoId)
+        {
+            await _contaCorrenteService.CancelarExtrato(extratoId);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Incluir extrato não avulso da conta corrente.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("IncluirExtratoNaoAvulso")]
+        public async Task<IActionResult> IncluirExtratoNaoAvulso([FromQuery] ExtratoContaCorrenteRequest request)
+        {
+            await _contaCorrenteService.IncluirExtratoNaoAvulso(request);
+            return Created();
         }
     }
 }
