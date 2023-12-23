@@ -1,4 +1,5 @@
-﻿using backend.Data.Context;
+﻿using Azure.Core;
+using backend.Data.Context;
 using backend.Interfaces.Repositories;
 using backend.Models.Responses;
 using Microsoft.EntityFrameworkCore;
@@ -17,22 +18,20 @@ namespace backend.Repositories
             return _extratoContaCorrenteDbContext.ExtratoContaCorrentes.Where(a => (a.Data >= request.DataInicio) && (a.Data <= request.DataFim));
         }
 
-        public void IncluirExtrato(ExtratoContaCorrenteRequest request)
+        public async Task<ExtratoContaCorrente> ObterExtratoPorId(int extratoId)
         {
-            var requestDb = new ExtratoContaCorrente()
-            {
-                Descricao = request.Descricao,
-                Avulso = request.Avulso,
-                Data = DateTime.Now,
-                StatusId = request.Status,
-                Valor = request.Valor,
-            };
+            var result = await _extratoContaCorrenteDbContext.ExtratoContaCorrentes.AsNoTracking().FirstOrDefaultAsync(a => a.Id == extratoId);
+            if (result == null) return new ExtratoContaCorrente() { };
+            return result;
+        }
 
-            _extratoContaCorrenteDbContext.ExtratoContaCorrentes.Add(requestDb);
+        public void IncluirExtrato(ExtratoContaCorrente request)
+        {
+            _extratoContaCorrenteDbContext.ExtratoContaCorrentes.Add(request);
             _extratoContaCorrenteDbContext.SaveChanges();
         }
 
-        public void AtualizarExtrato(AtualizarExtratoContaCorrenteResponse request)
+        public void AtualizarExtrato(AtualizarExtratoContaCorrenteRequest request)
         {
             var extratoContaCorrente = new ExtratoContaCorrente()
             {
@@ -43,7 +42,20 @@ namespace backend.Repositories
 
             _extratoContaCorrenteDbContext.Entry(extratoContaCorrente).Property(e => e.Valor).IsModified = true;
             _extratoContaCorrenteDbContext.Entry(extratoContaCorrente).Property(e => e.Data).IsModified = true;
-            //_extratoContaCorrenteDbContext.ExtratoContaCorrentes.Update(extratoContaCorrente);
+            _extratoContaCorrenteDbContext.SaveChanges();
+        }
+
+        public void CancelarExtrato(int extratoId)
+        {
+            var extratoContaCorrente = new ExtratoContaCorrente()
+            {
+                Id = extratoId,
+                StatusId = (int)EExtratoStatus.Cancelado,
+                Data = DateTime.Now,
+            };
+
+            _extratoContaCorrenteDbContext.Entry(extratoContaCorrente).Property(e => e.StatusId).IsModified = true;
+            _extratoContaCorrenteDbContext.Entry(extratoContaCorrente).Property(e => e.Data).IsModified = true;
             _extratoContaCorrenteDbContext.SaveChanges();
         }
     }

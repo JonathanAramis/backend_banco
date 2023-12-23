@@ -23,7 +23,7 @@ namespace backend.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("ObterExtrato")]
-        public async Task<IActionResult> ObterExtrato([FromQuery]ObterExtratoContaCorrenteRequest request) 
+        public async Task<IActionResult> ObterExtrato([FromQuery] ObterExtratoContaCorrenteRequest request)
         {
             var response = await _contaCorrenteService.ObterExtrato(request);
             return Ok(response);
@@ -35,9 +35,9 @@ namespace backend.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost("IncluirExtrato")]
-        public async Task<IActionResult> IncluirExtrato([FromQuery]ExtratoContaCorrenteRequest request)
+        public async Task<IActionResult> IncluirExtrato([FromQuery] ExtratoContaCorrenteRequest request)
         {
-            await _contaCorrenteService.IncluirExtrato(request);
+            await _contaCorrenteService.IncluirExtratoAvulso(request);
             return Created();
         }
 
@@ -47,10 +47,34 @@ namespace backend.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPut("AtualizarExtrato")]
-        public async Task<IActionResult> AtualizarExtrato([FromQuery] AtualizarExtratoContaCorrenteResponse request)
+        public async Task<IActionResult> AtualizarExtrato([FromQuery] AtualizarExtratoContaCorrenteRequest request)
         {
             _contaCorrenteService.AtualizarExtrato(request);
             return NoContent();
+        }
+
+        /// <summary>
+        /// Atualizar status do extrato para cancelado.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPut("Cancelar/Extrato/{extratoId}")]
+        public async Task<IActionResult> CancelarExtrato([FromRoute] int extratoId)
+        {
+            await _contaCorrenteService.CancelarExtrato(extratoId);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Incluir extrato não avulso da conta corrente.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("IncluirExtratoNaoAvulso")]
+        public async Task<IActionResult> IncluirExtratoNaoAvulso([FromQuery] ExtratoContaCorrenteRequest request)
+        {
+            await _contaCorrenteService.IncluirExtratoNaoAvulso(request);
+            return Created();
         }
     }
 }

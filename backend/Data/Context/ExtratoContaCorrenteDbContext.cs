@@ -13,11 +13,5 @@ namespace backend.Data.Context
         {
             base.OnModelCreating(modelBuilder);
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Integrated Security=SSPI;Persist Security Info=False;User ID=Jonathan;Initial Catalog=banco_task;Data Source=localhost\\SQLEXPRESS; TrustServerCertificate=True");
-            base.OnConfiguring(optionsBuilder);
-        }
     }
 }
